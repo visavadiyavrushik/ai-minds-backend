@@ -31,7 +31,9 @@ const signup = async (req, res) => {
     // Generate and send OTP
     await generateAndSendOtp(user);
 
-    res.status(201).json({ msg: "User registered successfully" });
+    res
+      .status(201)
+      .json({ msg: "User registered successfully. Please verify your email." });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
@@ -79,15 +81,20 @@ const signin = async (req, res) => {
   }
 };
 
-const getProfile = (req, res) => {
-  const token = req.headers.authorization.split(" ")[1];
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+const getProfile = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  User.findById(decoded.user.id)
-    .then((user) => res.json(user))
-    .catch((err) =>
-      res.status(500).json({ message: "Failed to fetch user profile" })
-    );
+    const user = await User.findById(decoded.user.id).select("-password"); // Exclude password field
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Failed to fetch user profile" });
+  }
 };
 
 module.exports = {
