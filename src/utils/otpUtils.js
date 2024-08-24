@@ -2,9 +2,8 @@ const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const OTP = require("../models/otpModel");
 
-// Configure Nodemailer transport
 const transporter = nodemailer.createTransport({
-  service: "Gmail", // Replace with your email service provider
+  service: "Gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -23,12 +22,14 @@ const sendOtpEmail = async (email, otp) => {
   await transporter.sendMail(mailOptions);
 };
 
-// Function to generate and send OTP
+// * Function to generate and send OTP
 const generateAndSendOtp = async (user) => {
   const otp = otpGenerator.generate(6, {
     digits: true,
-    upperCase: false,
-    specialChars: false,
+    alphabets: false, // No alphabets
+    upperCaseAlphabets: false, // No uppercase
+    specialChars: false, // No special characters
+    lowerCaseAlphabets: false,
   });
   const otpExpiration = new Date(Date.now() + 5 * 60 * 1000); // OTP valid for 5 minutes
 
