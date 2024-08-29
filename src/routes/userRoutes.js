@@ -1,5 +1,6 @@
 const express = require("express");
 const { getProfile } = require("../controllers/userController");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -8,6 +9,6 @@ const router = express.Router();
 // @desc    Get user profile
 // @access  Private (you would typically add an authentication middleware here)
 
-router.get("/profile", getProfile);
+router.get("/profile", authMiddleware, getProfile);
 
 module.exports = router;

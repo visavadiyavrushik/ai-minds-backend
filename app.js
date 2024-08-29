@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 connectDB();
 
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 
 app.get("/", (res) => res.send("API is running..."));
