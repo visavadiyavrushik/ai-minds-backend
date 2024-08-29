@@ -1,5 +1,10 @@
 const express = require("express");
-const { signup, signin } = require("../controllers/userController");
+const {
+  signup,
+  signin,
+  forgotPassword,
+  resetPassword,
+} = require("../controllers/userController");
 
 const { verifyOtp } = require("../controllers/otpController");
 
@@ -19,5 +24,9 @@ router.post("/verify-otp", verifyOtp);
 // @desc    Sign in a user
 // @access  Public
 router.post("/signin", signin);
+
+// Forgot Password and Reset Password routes
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 module.exports = router;
